@@ -108,7 +108,7 @@
             },
             async submitForm(){
                 try{
-                    let response=await axios.post('https://aeonaxy-technologies-private-limited-server.vercel.app/userregister',{
+                    let response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/userregister',{
                         email:this.email,
                         password:this.password,
                         name:this.name,
@@ -133,7 +133,7 @@
             },async sentotp(){
                 try{
                     if(this.email!='' && this.newpassword!='' && name!='' && phone!='' && dob!=''){
-                        let response=await axios.post('https://aeonaxy-technologies-private-limited-server.vercel.app/generateotpforregister',{
+                        let response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/generateotpforregister',{
                             email:this.email
     
                         })

@@ -435,7 +435,7 @@
         methods:{
             async getalluserdata(){
                 try{
-                    const response=await axios.get('https://aeonaxy-technologies-private-limited-server.vercel.app/getalluserdata',{
+                    const response=await axios.get('https://aeonaxy-technologies-private-limited.onrender.com/getalluserdata',{
                         headers: {
                             Authorization: token
                           }
@@ -464,7 +464,7 @@
             
             async getadmindata(){
                 try{
-                    const response=await axios.get('https://aeonaxy-technologies-private-limited-server.vercel.app/getuserdata',{
+                    const response=await axios.get('https://aeonaxy-technologies-private-limited.onrender.com/getuserdata',{
                         headers: {
                             Authorization: token
                           }
@@ -525,7 +525,7 @@
               async editname(){
                 if(this.editedname!=''&& this.epass!=''){
 
-                    let response=await axios.post('https://aeonaxy-technologies-private-limited-server.vercel.app/editname',{
+                    let response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/editname',{
                         newname:this.editedname,
                         password:this.epass
                     },{
@@ -546,7 +546,7 @@
             async changepassword(){
                 
                 if(this.newpass!='' && this.oldpass!=''){
-                    let response=await axios.post('https://aeonaxy-technologies-private-limited-server.vercel.app/changepassword',{
+                    let response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/changepassword',{
                         newpassword:this.newpass,
                         password:this.oldpass
                     },{
