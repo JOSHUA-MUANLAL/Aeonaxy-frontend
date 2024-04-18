@@ -462,7 +462,7 @@
             },
             async getsubcourse(){
                 try{
-                    const response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/filter',{
+                    const response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/getcourse/filter',{
                         subject:this.selectedSubject,
                         level:this.selectedLevel,
                         
@@ -491,7 +491,7 @@
             },
             async getlevelcourse(){
                 try{
-                    const response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/level',{
+                    const response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/getcourse/level',{
                         level:this.selectedLevel
                     },{
                         headers: {
