@@ -291,7 +291,7 @@
         </div>
 
         <div class="mb-6" v-if="uniqueLevels.length > 0">{{selectedLevel}}
-            <label for="subjectLevel">Select Subject:</label>
+            <label for="subjectLevel">Select Level:</label>
             <select id="subjectLevel" v-model="selectedLevel" @change="getcoursedata">
                 <option value="">Select</option>
                 <option v-for="level in uniqueLevels" :value="level">{{ level }}</option>
@@ -300,12 +300,12 @@
 
         
         <div class="card" v-for="course in paginatedData" :key="course" :href="course.url" >
-            <a :href="course.url">
+            
             <h2><strong>Title:</strong> {{ course.course_title }}</h2>
             <p><strong>Level:</strong> {{ course.level }}</p>
             <p><strong>Rating:</strong> {{ course.num_reviews }} reviews</p>
             <p><strong>Link:</strong>{{course.url}}</p>
-            <p><strong>Subject:</strong>{{course.subject}}</p></a>
+            <p><strong>Subject:</strong>{{course.subject}}</p>
             
             <button class="btn btn-secondary" @click="joincourse(course)">Join Course</button>
           </div>
