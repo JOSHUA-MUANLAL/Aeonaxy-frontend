@@ -596,6 +596,8 @@
                 if(response.status===200){
                     alert(`Joined Course Id ${course.course_id}`)
                     this.getcourse()
+                }else if(response.status===201){
+                    alert(`Already Joined Course ${course.course_title}`)
                 }
 
             },
