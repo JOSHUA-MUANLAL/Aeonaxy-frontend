@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* prevent horizontal scroll */
+        }
+
+        .panel {
+            position: fixed;
+            top: 0;
+            left: -500px; /* initially hidden */
+            width: 500px;
+            height: 100%;
+            background-color: #f4f4f4;
+            transition: left 0.3s ease;
+            z-index: 1000;
+            padding: 20px;
+            overflow-y:auto
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 999;
+
+        }
+
+        .open-panel {
+            left: 0 !important;
+        }
+
+        .close-panel {
+            left: -300px !important;
+        }
+
+        /* Custom styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 5px;
+            right: 0;
+            top: 40px;
+            width: 200px;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e5e7eb;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .data-display {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f3f4f6;
+            border-radius: 5px;
+        }
+
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            margin-top: 0;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: #fff;
+        }
+
+        /* Menu styles */
+        .menu-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            padding: 20px;
+            height: 80px; /* Adjust the height as needed */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 999;
+        }
+
+        .menu-item {
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            color: #fff;
+        }
+
+        .menu-item:hover {
+            background-color: #555;
+            border-radius: 5px;
+        }
+
+        .menu-item:not(:last-child) {
+            margin-right: 10px;
+        }
+
+        .menu-dropdown {
+            position: relative;
+        }
+
+       
+
+        .menu-dropdown:hover .menu-dropdown-content {
+            display: block;
+        }
+
+        .mycard {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        
+
+        span.simpletext{
+            font-size: 1vmax;
+        }
+        #logout {width:40%;
+            background-color: white;
+            color:black;
+            position: absolute;
+            bottom: 10px; /* Adjust this value as needed */
+        }
+
+        
+    </style><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@3.2.19/dist/vue.global.prod.js"></script>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="dashboard-container" id="dashboard">
+        <div class="panel" id="myPanel">
+            <h2><p class="text-4xl px-4">{{userdata.userName}} </p></h2>  
+                <button type="button" class="btn btn-default btn-sm" @click="vedit=!vedit">
+                <span class="glyphicon glyphicon-pencil"></span> Change Name 
+              </button> 
+                <form @submit.prevent="editname" class="form text-md" v-show="vedit"><br>
+                    <span class="simpletext">Type New Name</span><br>
+                <input class='form text-md' type="text" v-model="editedname"><br>
+                <span class="simpletext">Type Password</span><br>
+                <input class='form text-md' type="password" v-model="epass">
+                <button class="btn btn-secondary text-sm bg-blue-900 px-4 rounded-md" >Done</button>
+            </form>
+            <p>Email{{userdata.userEmail}}</p>
+            <p>Phone: {{userdata.phone}}</p>
+           
+
+            <button type="button" class="btn btn-default btn-sm" @click="pedit=!pedit">
+                <span class="glyphicon glyphicon-pencil"></span> Change Password 
+              </button> 
+                <form @submit.prevent="changepassword" class="form text-md" v-show="pedit"><br>
+                <span class="simpletext">Type Old Password</span><br>
+                <input class='form text-md' type="passwordt" v-model="oldpass"><br>
+                <span class="simpletext">Type New Password</span><br>
+                <input class='form text-md' type="password" v-model="newpass">
+                <button class="btn btn-secondary text-sm bg-blue-900 px-4 rounded-md" >Done</button>
+            </form>
+
+            <button id="logout" class="btn btn-primary absoulte bottom-4 px-4" @click="logout">LOGOUT</button>
+            
+        </div>
+
+
+
+<!--My COURSE PANEL-->
+        <div class="panel" id="myPanel2">
+            <h2>My Course</h2>
+            <div class="mycard" v-for="(course,index) in userdata.itemlist" :key="index" >
+            <a :href="course.url">
+                <h2><strong>Title:</strong> {{ course.course_title }}</h2>
+                <p><strong>Level:</strong> {{ course.url }}</p>
+                <p><strong>Subject:</strong>{{course.subject}}</p></a>
+                <button class="btn btn-warning" @click="removecourse(course.course_id)">Remove course</button>
+              
+            </div>
+            
+        </div>
+
+        <div class="panel" id="myPanel3">
+            <h2>My course Content</h2>
+            <p>This is some content inside the panel.</p>
+           
+        </div>
+
+
+
+
+        <div class="overlay" id="overlay" onclick="closepanel()">close the panel</div>
+        <div class="menu-bar">
+            <div>
+                <h2 class="text-xl font-semibold text-white">Dashboard</h2>
+            </div>
+            <div class="menu-dropdown">
+                <div class="menu-item" onclick="toggleProfilePanel()">Profile</div>
+                
+            </div>
+            <div class="menu-dropdown">
+                <div class="menu-item" onclick="toggleCartPanel()">Cart</div>
+                
+            </div>
+            <div class="menu-dropdown">
+                <div class="menu-item" onclick="toggleCoursePanel()">My course</div>
+                
+            </div>
+        </div>{{selectedSubject}}
+        <div class="mb-6" v-if="uniqueSubjects.length > 0">
+            <label for="subjectSelect">Select Subject:</label>
+            <select id="subjectSelect" v-model="selectedSubject" @change="getcoursedata">
+                <option value="">Select</option>
+                <option v-for="subject in uniqueSubjects" :value="subject">{{ subject }}</option>
+            </select>
+        </div>
+
+        <div class="mb-6" v-if="uniqueLevels.length > 0">{{selectedLevel}}
+            <label for="subjectLevel">Select Subject:</label>
+            <select id="subjectLevel" v-model="selectedLevel" @change="getcoursedata">
+                <option value="">Select</option>
+                <option v-for="level in uniqueLevels" :value="level">{{ level }}</option>
+            </select>
+        </div>
+
+        
+        <div class="card" v-for="course in paginatedData" :key="course" :href="course.url" >
+            <a :href="course.url">
+            <h2><strong>Title:</strong> {{ course.course_title }}</h2>
+            <p><strong>Level:</strong> {{ course.level }}</p>
+            <p><strong>Rating:</strong> {{ course.num_reviews }} reviews</p>
+            <p><strong>Link:</strong>{{course.url}}</p>
+            <p><strong>Subject:</strong>{{course.subject}}</p></a>
+            
+            <button class="btn btn-secondary" @click="joincourse(course)">Join Course</button>
+          </div>
+
+          <div>
+            <button class="btn btn-secondary text-sm bg-blue-900 px-4 rounded-md" @click="previousPage" :disabled="currentPage === 1">Previous</button>
+            <span>Page {{ currentPage }} of {{ totalPages }}</span>
+            <button class="btn btn-secondary text-sm bg-blue-900 px-4 rounded-md" @click="nextPage" :disabled="currentPage === totalPages">Next</button>
+          </div>
+          
+    </div>
+</body>
+<script>
+    function toggleProfilePanel() {
+        var panel = document.getElementById("myPanel");
+        var overlay = document.getElementById("overlay");
+        
+        panel.style.left='0px';
+        overlay.style.display='block'
+      }
+      
+      // Close the panel when clicking outside the panel
+      function closepanel(){
+          var panel = document.getElementById("myPanel");
+          var panel2 = document.getElementById("myPanel2");
+          var panel3 = document.getElementById("myPanel3");
+        var overlay = document.getElementById("overlay");
+        
+        panel.style.left='-500px';
+        panel2.style.left='-500px';
+        panel3.style.left='-500px';
+        overlay.style.display='none'
+          
+      }
+
+      function toggleCartPanel() {
+        var panel = document.getElementById("myPanel2");
+        var overlay = document.getElementById("overlay");
+        
+        panel.style.left='0px';
+        overlay.style.display='block'
+      }
+      function toggleCoursePanel() {
+        var panel = document.getElementById("myPanel3");
+        var overlay = document.getElementById("overlay");
+        
+        panel.style.left='0px';
+        overlay.style.display='block'
+      }
+      
+      
+
+
+
+
+
+    const token = sessionStorage.getItem('token')
+    const isRefreshing = performance.navigation.type === 1;
+    if (!token ) {
+      window.location.href = 'login.html';
+    }
+    const app=Vue.createApp({
+        data(){
+            return{
+                courses:[],
+                uniqueLevels:[],
+                selectedSubject:"",
+                filteredData:[],
+                uniqueSubjects:[],
+                select:'no',
+                selectedLevel:'',
+                dm:"",
+                userdata:{},
+                editedname:'',
+                vedit:false,
+                epass:'',
+                pedit:false,
+                oldpass:'',
+                newpass:'',
+                currentPage: 1,
+                pageSize: 10
+
+
+            }
+        },
+        computed: {
+            totalPages() {
+              return Math.ceil(this.courses.length / this.pageSize);
+            },
+            paginatedData() {
+              const startIndex = (this.currentPage - 1) * this.pageSize;
+              const endIndex = startIndex + this.pageSize;
+              return this.courses.slice(startIndex, endIndex);
+            }
+          },
+        
+        created(){
+            this.getcourse()
+            
+            
+            
+        },
+
+        methods:{
+            async getcourse(){
+                try{
+                    const response=await axios.get('http://localhost:8080/getcoursedata',{
+                        headers: {
+                            Authorization: token
+                          }
+                    })
+                if(response.status===200){
+                    
+                    
+                   
+                    this.courses=response.data
+                    
+                    this.uniqueSubject()
+                    this.uniqueLevel()
+                    this.getuserdata()
+                    
+
+                }else{
+                    this.courses=["course is empty"]
+                }  
+                }catch(error){
+                    alert(error)
+                    this.courses=[error]
+                }
+
+            },
+
+            uniqueSubject(){
+                let uniqueSubjectsSet = new Set();
+
+                // Iterate over the courses array and add each subject to the Set
+                this.courses.forEach(course => {
+                    uniqueSubjectsSet.add(course.subject);
+                });
+                
+                // Convert the Set to an array to get unique subjects
+                this.uniqueSubjects =Array.from(uniqueSubjectsSet)
+            },
+            uniqueLevel(){
+                let uniqueLevelset = new Set();
+
+                // Iterate over the courses array and add each subject to the Set
+                this.courses.forEach(course => {
+                    uniqueLevelset.add(course.level);
+                });
+                
+                // Convert the Set to an array to get unique subjects
+                this.uniqueLevels=Array.from(uniqueLevelset)
+            },
+            async getsubcourse(){
+                try{
+                    const response=await axios.post('http://localhost:8080/getcourse/filter',{
+                        subject:this.selectedSubject,
+                        level:this.selectedLevel,
+                        
+                    },{
+                        headers: {
+                            Authorization: token
+                          }
+                        });
+                if(response.status===200){
+                    alert("here")
+                    
+                    this.getc=true
+                    this.currentPage=1
+                    this.courses=response.data
+                    
+                    
+
+                }else{
+                    this.courses=["course is empty"]
+                }  
+                }catch(error){
+                    alert(error)
+                    
+                    this.courses=[error]
+                }
+            },
+            async getlevelcourse(){
+                try{
+                    const response=await axios.post('http://localhost:8080/getcourse/level',{
+                        level:this.selectedLevel
+                    },{
+                        headers: {
+                            Authorization: token
+                          }
+                    })
+                if(response.status===200){
+                    alert("here")
+                    
+                    this.getc=true
+                    this.courses=response.data
+                    
+                    
+
+                }else{
+                    this.courses=["course is empty"]
+                }  
+                }catch(error){
+                    alert(error)
+                    this.courses=[error]
+                }
+            },
+            async getsubwise(){
+                try{
+                    const response=await axios.post('http://localhost:8080/getcourse/sub',{
+                        subject:this.selectedSubject
+                    },{
+                        headers: {
+                            Authorization: token
+                          }
+                    })
+                if(response.status===200){
+                    
+                    
+                    this.getc=true
+                    this.courses=response.data
+                    
+                    
+
+                }else{
+                    this.courses=["course is empty"]
+                }  
+                }catch(error){
+                    alert(error)
+                    this.courses=[error]
+                }
+
+            }
+            ,
+            getcoursedata(){
+                if(this.selectedSubject!="" && this.selectedLevel!=""){
+                    this.getsubcourse()
+
+                }else if(this.selectedLevel!=""){
+                    this.getlevelcourse()
+
+                }else if(this.selectedSubject!=""){
+                    this.getsubwise()
+                }else{
+                    this.getcourse()
+                }
+            },
+            async getuserdata(){
+                let response=await axios.get('http://localhost:8080/getuserdata',{
+                    headers: {
+                        Authorization: token
+                      }
+                })
+
+                if(response.status===200){
+                    this.dm="recieved"
+                    console.log("Got user data")
+                   
+                    this.userdata=response.data;
+                }else{
+                    
+                }
+            },
+            async removecourse(index){
+                let response=await axios.post('http://localhost:8080/removecourse',{
+                    index:index
+                },{
+                    headers:{
+                        Authorization:token
+                    }
+                })
+                if(response.status===200){
+                    alert("removed course Successfully")
+                    this.getcourse()
+                }
+
+                
+            },
+            async joincourse(course){
+                let response=await axios.post('http://localhost:8080/joincourse',{
+                    data:course
+                },{
+                    headers:{
+                        Authorization:token
+                    }
+                })
+                if(response.status===200){
+                    alert(`Joined Course Id ${course.course_id}`)
+                    this.getcourse()
+                }
+
+            },
+            async editname(){
+                if(this.editedname!=''&& this.epass!=''){
+
+                    let response=await axios.post('http://localhost:8080/editname',{
+                        newname:this.editedname,
+                        password:this.epass
+                    },{
+                        headers:{
+                            Authorization:token
+                        }
+                    })
+
+                    if(response.status===200){
+                        this.epass=""
+                        alert("Name Succesfully changed")
+                    }else if(response.status===404){
+                        alert("Password Incorrect")
+                    }
+
+                }
+            },
+            async changepassword(){
+                
+                if(this.newpass!='' && this.oldpass!=''){
+                    let response=await axios.post('http://localhost:8080/changepassword',{
+                        newpassword:this.newpass,
+                        password:this.oldpass
+                    },{
+                        headers:{
+                            Authorization:token
+                        }
+                    })
+
+
+                    if(response.status===200){
+                        this.epass=''
+                        alert("Password changed success")
+                    }else{
+                        alert("Old Password Incorrect")
+                    }
+                }
+            }
+            ,
+            logout(){
+                sessionStorage.removeItem('token');
+                window.location.href = 'login.html';
+            },
+            nextPage() {
+                if (this.currentPage < this.totalPages) {
+                  this.currentPage++;
+                }
+              },
+              previousPage() {
+                if (this.currentPage > 1) {
+                  this.currentPage--;
+                }
+              }
+
+            
+        }
+    }
+    )
+    window.onbeforeunload = function () {
+        localStorage.removeItem('token');
+    };
+
+
+
+
+    app.mount('#dashboard')
+</script>
+
+</html>
