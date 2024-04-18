@@ -59,7 +59,7 @@
             async login(){
                 if(this.email && this.password){
                     try{
-                        const response=await axios.post('http://localhost:8080/loginadmin',{
+                        const response=await axios.post('https://aeonaxy-technologies-private-limited-server.vercel.app/loginadmin',{
                             email:this.email,
                             password:this.password
                         });

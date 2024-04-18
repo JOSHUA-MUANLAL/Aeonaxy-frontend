@@ -412,7 +412,7 @@
         methods:{
             async getcourse(){
                 try{
-                    const response=await axios.get('http://localhost:8080/getcoursedata',{
+                    const response=await axios.get('https://aeonaxy-technologies-private-limited-server.vercel.app/getcoursedata',{
                         headers: {
                             Authorization: token
                           }
@@ -462,7 +462,7 @@
             },
             async getsubcourse(){
                 try{
-                    const response=await axios.post('http://localhost:8080/getcourse/filter',{
+                    const response=await axios.post('https://aeonaxy-technologies-private-limited-server.vercel.app/filter',{
                         subject:this.selectedSubject,
                         level:this.selectedLevel,
                         
@@ -491,7 +491,7 @@
             },
             async getlevelcourse(){
                 try{
-                    const response=await axios.post('http://localhost:8080/getcourse/level',{
+                    const response=await axios.post('https://aeonaxy-technologies-private-limited-server.vercel.app/level',{
                         level:this.selectedLevel
                     },{
                         headers: {
@@ -516,7 +516,7 @@
             },
             async getsubwise(){
                 try{
-                    const response=await axios.post('http://localhost:8080/getcourse/sub',{
+                    const response=await axios.post('https://aeonaxy-technologies-private-limited-server.vercel.app/getcourse/sub',{
                         subject:this.selectedSubject
                     },{
                         headers: {
@@ -555,7 +555,7 @@
                 }
             },
             async getuserdata(){
-                let response=await axios.get('http://localhost:8080/getuserdata',{
+                let response=await axios.get('https://aeonaxy-technologies-private-limited-server.vercel.app/getuserdata',{
                     headers: {
                         Authorization: token
                       }
@@ -571,7 +571,7 @@
                 }
             },
             async removecourse(index){
-                let response=await axios.post('http://localhost:8080/removecourse',{
+                let response=await axios.post('https://aeonaxy-technologies-private-limited-server.vercel.app/removecourse',{
                     index:index
                 },{
                     headers:{
@@ -586,7 +586,7 @@
                 
             },
             async joincourse(course){
-                let response=await axios.post('http://localhost:8080/joincourse',{
+                let response=await axios.post('https://aeonaxy-technologies-private-limited-server.vercel.app/joincourse',{
                     data:course
                 },{
                     headers:{
@@ -602,7 +602,7 @@
             async editname(){
                 if(this.editedname!=''&& this.epass!=''){
 
-                    let response=await axios.post('http://localhost:8080/editname',{
+                    let response=await axios.post('https://aeonaxy-technologies-private-limited-server.vercel.app/editname',{
                         newname:this.editedname,
                         password:this.epass
                     },{
@@ -623,7 +623,7 @@
             async changepassword(){
                 
                 if(this.newpass!='' && this.oldpass!=''){
-                    let response=await axios.post('http://localhost:8080/changepassword',{
+                    let response=await axios.post('https://aeonaxy-technologies-private-limited-server.vercel.app/changepassword',{
                         newpassword:this.newpass,
                         password:this.oldpass
                     },{
