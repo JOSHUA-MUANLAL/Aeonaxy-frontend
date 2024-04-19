@@ -240,7 +240,7 @@
             <div class="spinner"></div>
             </div>
         <div class="panel" id="myPanel">
-            <h2><p class="text-4xl px-4">{{userdata.userName}} </p></h2>  <button type='button' class='btn btn-danger' onclick='closepanel'>Close</button><br><br>
+            <h2><p class="text-4xl px-4">{{userdata.userName}} </p></h2>  <button type='button' class='btn btn-danger' onclick='closepanel()'>Close</button><br><br>
                 <button type="button" class="btn btn-default btn-sm" @click="vedit=!vedit">
                 <span class="glyphicon glyphicon-pencil"></span> Change Name 
               </button> 
@@ -274,8 +274,8 @@
 
 <!--My COURSE PANEL-->
         <div class="panel" id="myPanel2">
-            <h2>My Course</h2>
-            <div class="mycard" v-for="(course,index) in userdata.itemlist" :key="index" >
+            <h2>My Course</h2>&nbsp
+<button type='button' class='btn btn-danger' onclick='closepanel()'>Close</button>      <br><br>      <div class="mycard" v-for="(course,index) in userdata.itemlist" :key="index" >
             <a :href="course.url">
                 <h2><strong>Title:</strong> {{ course.course_title }}</h2>
                 <p><strong>Level:</strong> {{ course.url }}</p>
