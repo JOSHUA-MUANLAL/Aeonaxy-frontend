@@ -47,13 +47,17 @@
         }
 
         .course-panel {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+           
+         
             display: none;
             padding: 10px;
             background-color: #f9f9f9;
             max-width: 300px;
-            height:50%;
+            height:360px;
             margin-top: 5px;
-            overflow-y:auto
+            overflow-y:auto;
         }
     
         .dropdown-btn {
@@ -66,6 +70,14 @@
         }
         .dropdown-btn2 {
             background-color: red;
+            color: white;
+            padding: 5px;
+            font-size: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .dropdown-btn3 {
+            background-color: rgb(255, 115, 0);
             color: white;
             padding: 5px;
             font-size: 10px;
@@ -134,6 +146,14 @@
             padding: 20px;
             background-color: #f3f4f6;
             border-radius: 5px;
+        }
+        .coursebox{
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            
         }
 
         .card {
@@ -228,6 +248,18 @@
         }
 
         .popup {
+            display:none ; /* Hide the popup by default */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #f9f9f9;
+            padding: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 100000;
+          }
+          .popup2 {
             display:none ; /* Hide the popup by default */
             position: fixed;
             top: 50%;
@@ -356,11 +388,30 @@
                 <br><br>
                 <button onclick="togglePopup()">Close</button>
               </div>&nbsp
-            <button class="dropdown-btn" onclick="toggleDropdown(this)">User Courses</button>
+            <button class="dropdown-btn" onclick="toggleDropdown(this)">User Courses</button>&nbsp;
+
+            <button class=" dropdown-btn3 " onclick="togglemessage()">Message User</button>
+
+            <div id="popup2" class="popup2">
+                <h2>Sending Email To  {{user.userName}}</h2>
+                {{messagef}}
+                <p>Subject: </p>
+                <form @submit.prevent="tomessage(user.userEmail)">
+                    <input class="border border-blue-500" type="text" v-model='mysubject'><br>
+                    The Message:<br>
+                    <textarea v-model="mymessage" rows="4" cols="50" class="border border-gray-300 rounded-md p-2"> </textarea><br><br>
+                    <button class="btn btn-primary text-xs">Confirm</button>
+                </form>
+                <br><br>
+                <button onclick="togglemessage()">Close</button>
+              </div>
             
+
+
+
            
             <div class="course-panel">
-                <div v-for="course in user.itemlist" :key="course.id">
+                <div class="coursebox" v-for="course in user.itemlist" :key="course.id">
                     <p><strong>Course Title:</strong> {{ course.course_title }}</p>
                     <p><strong>Subject:</strong> {{ course.subject }}</p>
                     <p><strong>Level:</strong> {{ course.level }}</p>
@@ -378,6 +429,14 @@
     </div>
 </body>
 <script>
+    function togglemessage() {
+        var popup = document.getElementById('popup2');
+        if (popup.style.display =='block') {
+          popup.style.display = 'none';
+        } else {
+          popup.style.display = 'block';
+        }
+      }
 
     function togglePopup() {
         var popup = document.getElementById('popup');
@@ -447,7 +506,10 @@
                 oldpass:'',
                 loading:false,
                 vedit:false,
-                pedit:false
+                pedit:false,
+                mymessage:'',
+                mysubject:'',
+                messagef:''
               
 
 
@@ -629,6 +691,38 @@
                 this.loading=true
                 sessionStorage.removeItem('token');
                 window.location.href = 'login.html';
+            },async tomessage(email){
+                try{
+                    this.loading=true
+                    if(this.mysubject!='' && this.mymessage!=''){
+                        let response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/sentmessage',{
+                            message:this.mymessage,
+                            subject:this.mysubject,
+                            email:email
+                        },{
+                            headers:{
+                                Authorization:token
+                            }
+                        }) 
+                        if(response.status===200){
+                        alert("Message Sent")
+                    }else{
+                        alert("Unable to Send")
+                        alert(response.data.message)
+                    }
+                    }else{
+                        this.loading=false
+                        this.messagef="Please Fill all the field"
+                    }
+
+                   
+
+
+
+                }catch(error){
+                    alert(error)
+                }
+
             }
            
             
