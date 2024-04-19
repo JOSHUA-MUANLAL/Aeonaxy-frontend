@@ -248,7 +248,7 @@
         }
 
         .popup {
-            display:none ; /* Hide the popup by default */
+           
             position: fixed;
             top: 50%;
             left: 50%;
@@ -260,7 +260,7 @@
             z-index: 100000;
           }
           .popup2 {
-            display:none ; /* Hide the popup by default */
+          
             position: fixed;
             top: 50%;
             left: 50%;
@@ -373,9 +373,9 @@
             <p><strong>User Email:</strong> {{ user.userEmail }}</p>
             <p><strong>User Phone:</strong> {{ user.phone }}</p>
             <p><strong>User DOB:</strong> {{ user.dob }}</p>
-            <button class=" dropdown-btn2 " onclick="togglePopup()">Remove User</button>
+            <button class=" dropdown-btn2 " @click="u=user.userEmail">Remove User</button>
 
-            <div id="popup" class="popup">
+            <div  class="popup" v-show="user.userEmail==u">
                 <h2>Type Your Password To Confirm </h2>
                 {{removemsg}}
                 <p>Removing User {{user.userName}}</p>
@@ -386,14 +386,14 @@
                     <button class="btn btn-primary text-xs">Confirm</button>
                 </form>
                 <br><br>
-                <button onclick="togglePopup()">Close</button>
+                <button @click='u=false' >Close</button>
               </div>&nbsp
 
 
               
-            <button class=" dropdown-btn3 " onclick="togglemessage()">Message User</button>
+            <button class=" dropdown-btn3 " @click="y=user.userEmail">Message User</button>
 
-            <div id="popup2" class="popup2" >
+            <div  class="popup2" v-show="user.userEmail==y">
                 <h2>Sending Email To  {{user.userName}}</h2>
                 <span class="text-red-600">{{messagef}}</span>
                 <p>Subject: </p>
@@ -404,7 +404,7 @@
                     <button class="btn btn-primary text-xs">Confirm</button>
                 </form>
                 <br><br>
-                <button onclick="togglemessage()">Close</button>
+                <button @click="y=false">Close</button>
               </div>&nbsp
 
 
@@ -418,7 +418,7 @@
             
 
 
-
+         
            
             <div class="course-panel">
                 <div class="coursebox" v-for="course in user.itemlist" :key="course.id">
@@ -439,25 +439,7 @@
     </div>
 </body>
 <script>
-    function togglemessage() {
-        var popup = document.getElementById('popup2');
-        if (popup.style.display =='block') {
-          popup.style.display = 'none';
-        } else {
-          popup.style.display = 'block';
-        }
-      }
-
-     
-
-    function togglePopup() {
-        var popup = document.getElementById('popup');
-        if (popup.style.display =='block') {
-          popup.style.display = 'none';
-        } else {
-          popup.style.display = 'block';
-        }
-      }
+    
       
     function toggleDropdown(btn) {
         var panel = btn.nextElementSibling;
@@ -521,7 +503,9 @@
                 pedit:false,
                 mymessage:'',
                 mysubject:'',
-                messagef:''
+                messagef:'',
+                u:'',
+                y:''
               
 
 
@@ -723,7 +707,7 @@
                         alert(response.data.message)
                     }
                     }else{
-                        this.loading=false
+                        
                         this.messagef="Please Fill all the field*"
                     }
 
