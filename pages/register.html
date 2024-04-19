@@ -44,6 +44,7 @@
 
 <body class="bg-gray-200">
     <div class="min-h-screen flex justify-center items-center" id="register">
+        
         <div class="dashboard-container" id="dashboard">
             <div v-if="loading" class="spinner-overlay">
                 <div class="spinner"></div>
@@ -96,8 +97,8 @@
                 </div>
                 <button  :disabled="!passwordsMatch"  
                     class="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Register</button>
-                    <center><a class="text-center text-blue-800 text-sm font-bold underline" href="login.html" >Already Have An Account?</a></center> 
-                    <br><a class="text-center text-pink-800 text-sm font-bold " href="https://joshua-muanlal.github.io/Aeonaxy-frontend/" >Home</a>
+                    <center><a class="text-center text-blue-800 text-sm font-bold underline" href="login.html" >Already Have An Account?</a>
+                    <br><a class="text-center text-pink-800 text-sm font-bold " href="https://joshua-muanlal.github.io/Aeonaxy-frontend/" >Home</a></center> 
             </form>
         </div>
     </div>
@@ -116,7 +117,9 @@
                 password:'',
                 confirmpassword:'',
                 passwordmsg:'',
-                loading:false
+                loading:false,
+                otp:'',
+                cotp:''
 
 
             }
@@ -176,23 +179,32 @@
                         })
     
                         if(response.status===200){this.loading=false
-                            let copt=prompt(`An OTP has Been Sent to your Email ${this.email}`)
-                            
+                            this.otp=response.data.otp
+                           
+                            this.loading=false
     
-                            if(response.data.otp==copt){
-                                
-                                this.submitForm()
+                            if(!this.opt){
+                               this.checkotp()
                             }else{
-                                alert("OTP mismatch")
+                               
                             }
                         }else{
-                            this.emsg=response.data.message
+                           alert(response.data.message)
                         }
                     }else{
                         alert("Please enter all field")}
                 }catch(error){
-                    alert("here is error",error)
+                    alert(error)
                 }finally{this.loading=false}
+            }, 
+            checkotp(){
+                this.copt=prompt(`An OTP has Been Sent to your Email ${this.email} \n Note: avoid closing the window or tab`)
+                if(this.otp==this.copt){
+                    this.submitForm()
+                }else{
+                    this.checkotp()
+                }
+
             }
             
 

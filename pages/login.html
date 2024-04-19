@@ -46,7 +46,8 @@
         <div v-if="loading" class="spinner-overlay">
             <div class="spinner"></div>
             </div>
-        <h2 class="text-2xl font-semibold mb-6">User Login</h2>
+        <h2 class="text-2xl font-semibold mb-6">User Login<br>
+        <p class="text-red-500">{{message}}</p></h2>
         <form  @submit.prevent="login">
             
             <div class="mb-4">
@@ -74,7 +75,8 @@
                 email:"",
                 password:"",
                 comb:'',
-                loading:false
+                loading:false,
+                msg:''
                 
             }
         },
@@ -100,7 +102,7 @@
                         if(response.status===200){
                             this.comb="status found"
                             sessionStorage.setItem('token', response.data.token);
-                            alert("Login Success")
+                            
                             window.location.href = 'dashboard.html';
                         }else if(response.status===201){
                             this.loading=false
@@ -110,7 +112,7 @@
                         }
 
                     }catch(error){
-                        alert("Login Failed")
+                        this.msg="Failed to Login"
                         this.loading=false
                     }
                 }
