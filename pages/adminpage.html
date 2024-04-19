@@ -310,7 +310,6 @@
             <p><strong>User Email:</strong> {{ user.userEmail }}</p>
             <p><strong>User Phone:</strong> {{ user.phone }}</p>
             <p><strong>User DOB:</strong> {{ user.dob }}</p>
-            <button class="dropdown-btn" onclick="toggleDropdown(this)">User Courses</button>&nbsp
             <button class=" dropdown-btn2 " onclick="togglePopup()">Remove User</button>
 
             <div id="popup" class="popup">
@@ -325,7 +324,10 @@
                 </form>
                 <br><br>
                 <button onclick="togglePopup()">Close</button>
-              </div>
+              </div>&nbsp
+            <button class="dropdown-btn" onclick="toggleDropdown(this)">User Courses</button>
+            
+           
             <div class="course-panel">
                 <div v-for="course in user.itemlist" :key="course.id">
                     <p><strong>Course Title:</strong> {{ course.course_title }}</p>
@@ -333,7 +335,9 @@
                     <p><strong>Level:</strong> {{ course.level }}</p>
                 </div>
             </div>
+            
         </div>
+        
         <div>
             <button class="btn btn-secondary text-sm bg-blue-900 px-4 rounded-md" @click="previousPage" :disabled="currentPage === 1">Previous</button>
             <span>Page {{ currentPage }} of {{ totalPages }}</span>
@@ -499,12 +503,12 @@
               async removeuser(email){
                 try{
                     if(this.confirmpassword!='' && this.reason!=''){
-                        let response=await axios.post('/removeuser',{
+                        let response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/removeuser',{
                             reason:this.reason,
                             email:email,
                             confirmpassword:this.confirmpassword
                         },{
-                            header:{
+                            headers:{
                                 Authorization:token
                             }
                         })
@@ -513,12 +517,13 @@
                         if(response.status===200){
                             alert(response.data.message)
                         }else{
+                            
                             alert(response.data.message)
                         }
                     }
 
                 }catch(error){
-                    alert(error)
+                    alert(error,"unable to remove")
                 }
 
               },
