@@ -394,7 +394,7 @@
 
             <div id="popup2" class="popup2">
                 <h2>Sending Email To  {{user.userName}}</h2>
-                {{messagef}}
+                <span class="text-red-600">{{messagef}}</span>
                 <p>Subject: </p>
                 <form @submit.prevent="tomessage(user.userEmail)">
                     <input class="border border-blue-500" type="text" v-model='mysubject'><br>
@@ -712,7 +712,7 @@
                     }
                     }else{
                         this.loading=false
-                        this.messagef="Please Fill all the field"
+                        this.messagef="Please Fill all the field*"
                     }
 
                    
