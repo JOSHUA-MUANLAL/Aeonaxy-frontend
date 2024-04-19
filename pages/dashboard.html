@@ -311,7 +311,7 @@
                 <div class="menu-item" onclick="toggleCoursePanel()">My course</div>
                 
             </div>
-        </div>{{selectedSubject}}
+        </div>
         <div class="mb-6" v-if="uniqueSubjects.length > 0">
             <label for="subjectSelect">Select Subject:</label>
             <select id="subjectSelect" v-model="selectedSubject" @change="getcoursedata">
@@ -320,7 +320,7 @@
             </select>
         </div>
 
-        <div class="mb-6" v-if="uniqueLevels.length > 0">{{selectedLevel}}
+        <div class="mb-6" v-if="uniqueLevels.length > 0">
             <label for="subjectLevel">Select Level:</label>
             <select id="subjectLevel" v-model="selectedLevel" @change="getcoursedata">
                 <option value="">Select</option>
@@ -506,9 +506,9 @@
                           }
                         });
                 if(response.status===200){
-                    alert("here")
+                   
                     
-                    this.getc=true
+                    
                     this.currentPage=1
                     this.courses=response.data
                     
