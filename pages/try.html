@@ -239,6 +239,8 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             z-index: 100000;
           }
+
+         
           .spinner-overlay {
             position: fixed;
             top: 0;
@@ -265,6 +267,7 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
           }
+        
 
         
     </style><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -277,102 +280,110 @@
 </head>
 
 <body>
+    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+
     <div class="dashboard-container" id="dashboard">
         <div v-if="loading" class="spinner-overlay">
             <div class="spinner"></div>
-            </div>
-        
-        <div class="panel" id="myPanel">
-            <h2><p class="text-4xl px-4">{{admindata.userName}} </p></h2>  
-                <button type="button" class="btn btn-default btn-sm" @click="vedit=!vedit">
-                <span class="glyphicon glyphicon-pencil"></span> Change Name 
-              </button> 
-                <form @submit.prevent="editname" class="form text-md" v-show="vedit"><br>
-                    <span class="simpletext">Type New Name</span><br>
-                <input class='form text-md' type="text" v-model="editedname"><br>
-                <span class="simpletext">Type Password</span><br>
-                <input class='form text-md' type="password" v-model="epass">
-                <button class="btn btn-secondary text-sm bg-blue-900 px-4 rounded-md" >Done</button>
-            </form>
-            <p>Email{{admindata.userEmail}}</p>
-            <p>Phone: {{admindata.phone}}</p>
+        <div v-if="loading" class="spinners">
+            <!-- You can use any loading animation here, like a spinner -->
            
-
-            <button type="button" class="btn btn-default btn-sm" @click="pedit=!pedit">
-                <span class="glyphicon glyphicon-pencil"></span> Change Password 
-              </button> 
-                <form @submit.prevent="changepassword" class="form text-md" v-show="pedit"><br>
-                <span class="simpletext">Type Old Password</span><br>
-                <input class='form text-md' type="passwordt" v-model="oldpass"><br>
-                <span class="simpletext">Type New Password</span><br>
-                <input class='form text-md' type="password" v-model="newpass">
-                <button class="btn btn-secondary text-sm bg-blue-900 px-4 rounded-md" >Done</button>
-            </form>
-
-            <button id="logout" class="btn btn-primary absoulte bottom-4 px-4" @click="logout">LOGOUT</button>
-            
         </div>
-
-
-
-<!--My COURSE PANEL-->
-       
-
-
-
-
-        <div class="overlay" id="overlay" onclick="closepanel()">close the panel</div>
-        <div class="menu-bar">
-            <div>
-                <h2 class="text-xl font-semibold text-white">User Records</h2>
-            </div>
-            <div class="menu-dropdown">
-                <div class="menu-item" onclick="toggleProfilePanel()">Profile</div>
+        <div v-if="!loading">
+            <div class="panel" id="myPanel">
+                <h2><p class="text-4xl px-4">{{admindata.userName}} </p></h2>  
+                    <button type="button" class="btn btn-default btn-sm" @click="vedit=!vedit">
+                    <span class="glyphicon glyphicon-pencil"></span> Change Name 
+                  </button> 
+                    <form @submit.prevent="editname" class="form text-md" v-show="vedit"><br>
+                        <span class="simpletext">Type New Name</span><br>
+                    <input class='form text-md' type="text" v-model="editedname"><br>
+                    <span class="simpletext">Type Password</span><br>
+                    <input class='form text-md' type="password" v-model="epass">
+                    <button class="btn btn-secondary text-sm bg-blue-900 px-4 rounded-md" >Done</button>
+                </form>
+                <p>Email{{admindata.userEmail}}</p>
+                <p>Phone: {{admindata.phone}}</p>
+               
+    
+                <button type="button" class="btn btn-default btn-sm" @click="pedit=!pedit">
+                    <span class="glyphicon glyphicon-pencil"></span> Change Password 
+                  </button> 
+                    <form @submit.prevent="changepassword" class="form text-md" v-show="pedit"><br>
+                    <span class="simpletext">Type Old Password</span><br>
+                    <input class='form text-md' type="passwordt" v-model="oldpass"><br>
+                    <span class="simpletext">Type New Password</span><br>
+                    <input class='form text-md' type="password" v-model="newpass">
+                    <button class="btn btn-secondary text-sm bg-blue-900 px-4 rounded-md" >Done</button>
+                </form>
+    
+                <button id="logout" class="btn btn-primary absoulte bottom-4 px-4" @click="logout">LOGOUT</button>
                 
             </div>
+    
+    
+    
+    <!--My COURSE PANEL-->
            
-        </div>
-       
-
-        
-        <div class="card" v-for="user in paginatedData" :key="user.userName">
-            <h2><strong>User Name:</strong> {{ user.userName }}</h2>
-            <p><strong>User Email:</strong> {{ user.userEmail }}</p>
-            <p><strong>User Phone:</strong> {{ user.phone }}</p>
-            <p><strong>User DOB:</strong> {{ user.dob }}</p>
-            <button class=" dropdown-btn2 " onclick="togglePopup()">Remove User</button>
-
-            <div id="popup" class="popup">
-                <h2>Type Your Password To Confirm </h2>
-                {{removemsg}}
-                <p>Removing User {{user.userName}}</p>
-                <form @submit.prevent="removeuser(user.userEmail)">
-                    <input class="border border-blue-500" type="password" v-model='confirmpassword'><br>
-                    State the reason<br>
-                    <input class="border border-blue-500" type="text" v-model="reason"><br><br>
-                    <button class="btn btn-primary text-xs">Confirm</button>
-                </form>
-                <br><br>
-                <button onclick="togglePopup()">Close</button>
-              </div>&nbsp
-            <button class="dropdown-btn" onclick="toggleDropdown(this)">User Courses</button>
-            
-           
-            <div class="course-panel">
-                <div v-for="course in user.itemlist" :key="course.id">
-                    <p><strong>Course Title:</strong> {{ course.course_title }}</p>
-                    <p><strong>Subject:</strong> {{ course.subject }}</p>
-                    <p><strong>Level:</strong> {{ course.level }}</p>
+    
+    
+    
+    
+            <div class="overlay" id="overlay" onclick="closepanel()">close the panel</div>
+            <div class="menu-bar">
+                <div>
+                    <h2 class="text-xl font-semibold text-white">User Records</h2>
                 </div>
+                <div class="menu-dropdown">
+                    <div class="menu-item" onclick="toggleProfilePanel()">Profile</div>
+                    
+                </div>
+               
+            </div>
+           
+    
+            
+            <div class="card" v-for="user in paginatedData" :key="user.userName">
+                <h2><strong>User Name:</strong> {{ user.userName }}</h2>
+                <p><strong>User Email:</strong> {{ user.userEmail }}</p>
+                <p><strong>User Phone:</strong> {{ user.phone }}</p>
+                <p><strong>User DOB:</strong> {{ user.dob }}</p>
+                <button class=" dropdown-btn2 " onclick="togglePopup()">Remove User</button>
+    
+                <div id="popup" class="popup">
+                    <h2>Type Your Password To Confirm </h2>
+                    {{removemsg}}
+                    <p>Removing User {{user.userName}}</p>
+                    <form @submit.prevent="removeuser(user.userEmail)">
+                        <input class="border border-blue-500" type="password" v-model='confirmpassword'><br>
+                        State the reason<br>
+                        <input class="border border-blue-500" type="text" v-model="reason"><br><br>
+                        <button class="btn btn-primary text-xs">Confirm</button>
+                    </form>
+                    <br><br>
+                    <button onclick="togglePopup()">Close</button>
+                  </div>&nbsp
+                <button class="dropdown-btn" onclick="toggleDropdown(this)">User Courses</button>
+                
+               
+                <div class="course-panel">
+                    <div v-for="course in user.itemlist" :key="course.id">
+                        <p><strong>Course Title:</strong> {{ course.course_title }}</p>
+                        <p><strong>Subject:</strong> {{ course.subject }}</p>
+                        <p><strong>Level:</strong> {{ course.level }}</p>
+                    </div>
+                </div>
+                
             </div>
             
+            <div>
+                <button class="btn btn-secondary text-sm bg-blue-900 px-4 rounded-md" @click="previousPage" :disabled="currentPage === 1">Previous</button>
+                <span>Page {{ currentPage }} of {{ totalPages }}</span>
+                <button class="btn btn-secondary text-sm bg-blue-900 px-4 rounded-md" @click="nextPage" :disabled="currentPage === totalPages">Next</button>
+              </div>
         </div>
         
-        <div>
-            <button class="btn btn-secondary text-sm bg-blue-900 px-4 rounded-md" @click="previousPage" :disabled="currentPage === 1">Previous</button>
-            <span>Page {{ currentPage }} of {{ totalPages }}</span>
-            <button class="btn btn-secondary text-sm bg-blue-900 px-4 rounded-md" @click="nextPage" :disabled="currentPage === totalPages">Next</button>
-          </div>
+        
           
     </div>
 </body>
@@ -427,7 +438,7 @@
 
     const token = sessionStorage.getItem('token')
     const isRefreshing = performance.navigation.type === 1;
-    if (!token ) {
+    if (token ) {
       window.location.href = 'login.html';
     }
     const app=Vue.createApp({
@@ -443,8 +454,7 @@
                 reason:'',
                 newname:'',
                 newpassword:'',
-                oldpass:'',
-                loading:false,
+                oldpass:'',loading:true
               
 
 
@@ -469,7 +479,7 @@
 
         methods:{
             async getalluserdata(){
-                try{ this.loading=true
+                try{
                     const response=await axios.get('https://aeonaxy-technologies-private-limited.onrender.com/getalluserdata',{
                         headers: {
                             Authorization: token
@@ -481,7 +491,6 @@
                     
                    
                     this.userdata=response.data
-                    this.loading=false
                     
                     
 
@@ -493,14 +502,13 @@
                 this.userdata=[error]
                     alert(error)
                     
-                }finally{this.loading=false}
+                }
 
             },
 
             
             async getadmindata(){
                 try{
-                    this.loading=true
                     const response=await axios.get('https://aeonaxy-technologies-private-limited.onrender.com/getuserdata',{
                         headers: {
                             Authorization: token
@@ -521,8 +529,6 @@
                     alert(error,"could fetch")
                     
                     this.admindata=[error]
-                }finally{
-                    this.loading=false
                 }
             },
             nextPage() {
@@ -536,7 +542,7 @@
                 }
               },
               async removeuser(email){
-                try{this.loading=true
+                try{
                     if(this.confirmpassword!='' && this.reason!=''){
                         let response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/removeuser',{
                             reason:this.reason,
@@ -560,14 +566,11 @@
 
                 }catch(error){
                     alert(error,"unable to remove")
-                }finally{
-                    this.loading=false
                 }
 
               },
               async editname(){
                 try{
-                    this.loading=true
                     if(this.editedname!=''&& this.epass!=''){
 
                         let response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/editname',{
@@ -589,14 +592,11 @@
                     }
                 }catch(error){
                     alert(error)
-                }finally{
-                    this.loading=false
                 }
             },
             async changepassword(){
                 
                try{
-                this.loading=true
                 if(this.newpass!='' && this.oldpass!=''){
                     let response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/changepassword',{
                         newpassword:this.newpass,
@@ -617,13 +617,10 @@
                 }
                }catch(error){
                 alert(error)
-               }finally{
-                this.loading=false
                }
             }
             ,
             logout(){
-                this.loading=true
                 sessionStorage.removeItem('token');
                 window.location.href = 'login.html';
             }

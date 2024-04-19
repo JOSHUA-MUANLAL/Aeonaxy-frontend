@@ -196,6 +196,33 @@
             bottom: 10px; /* Adjust this value as needed */
         }
 
+        .spinner-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.7); /* Translucent white */
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+      
+          .spinner {
+            border: 4px solid #f3f3f3; /* Light grey */
+            border-top: 4px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+          }
+      
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+
         
     </style><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -208,6 +235,9 @@
 
 <body>
     <div class="dashboard-container" id="dashboard">
+        <div v-if="loading" class="spinner-overlay">
+            <div class="spinner"></div>
+            </div>
         <div class="panel" id="myPanel">
             <h2><p class="text-4xl px-4">{{userdata.userName}} </p></h2>  
                 <button type="button" class="btn btn-default btn-sm" @click="vedit=!vedit">
@@ -386,7 +416,8 @@
                 oldpass:'',
                 newpass:'',
                 currentPage: 1,
-                pageSize: 10
+                pageSize: 10,
+                loading:false
 
 
             }
@@ -411,7 +442,7 @@
 
         methods:{
             async getcourse(){
-                try{
+                try{this.loading=true
                     const response=await axios.get('https://aeonaxy-technologies-private-limited.onrender.com/getcoursedata',{
                         headers: {
                             Authorization: token
@@ -434,6 +465,8 @@
                 }catch(error){
                     alert(error)
                     this.courses=[error]
+                }finally{
+                    this.loading=false
                 }
 
             },
@@ -462,6 +495,7 @@
             },
             async getsubcourse(){
                 try{
+                    this.loading=true
                     const response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/getcourse/filter',{
                         subject:this.selectedSubject,
                         level:this.selectedLevel,
@@ -487,10 +521,12 @@
                     alert(error)
                     
                     this.courses=[error]
+                }finally{
+                    this.loading=false
                 }
             },
             async getlevelcourse(){
-                try{
+                try{this.loading=true
                     const response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/getcourse/level',{
                         level:this.selectedLevel
                     },{
@@ -499,7 +535,7 @@
                           }
                     })
                 if(response.status===200){
-                    alert("here")
+                    
                     
                     this.getc=true
                     this.courses=response.data
@@ -512,10 +548,13 @@
                 }catch(error){
                     alert("coudnt get cousre by level",error)
                     this.courses=[error]
+                }finally{
+                    this.loading=false
                 }
             },
             async getsubwise(){
                 try{
+                    this.loading=true
                     const response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/getcourse/sub',{
                         subject:this.selectedSubject
                     },{
@@ -526,7 +565,7 @@
                 if(response.status===200){
                     
                     
-                    this.getc=true
+                 
                     this.courses=response.data
                     
                     
@@ -537,12 +576,15 @@
                 }catch(error){
                     alert(error)
                     this.courses=[error]
+                }finally{
+                    this.loading=false
                 }
 
             }
             ,
             getcoursedata(){
                try{
+                this.loading=true
                 if(this.selectedSubject!="" && this.selectedLevel!=""){
                     this.getsubcourse()
 
@@ -556,10 +598,12 @@
                 }
                }catch(error){
                 alert(error)
+               }finally{
+                this.loading=false
                }
             },
             async getuserdata(){
-                try{
+                try{this.loading=true
                     let response=await axios.get('https://aeonaxy-technologies-private-limited.onrender.com/getuserdata',{
                         headers: {
                             Authorization: token
@@ -567,7 +611,7 @@
                     })
     
                     if(response.status===200){
-                        this.dm="recieved"
+                        
                         console.log("Got user data")
                        
                         this.userdata=response.data;
@@ -576,10 +620,12 @@
                     }
                 }catch(error){
                     alert(error)
+                }finally{
+                    this.loading=false
                 }
             },
             async removecourse(index){
-                try{
+                try{ this.loading=true
                     let response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/removecourse',{
                         index:index
                     },{
@@ -588,17 +634,22 @@
                         }
                     })
                     if(response.status===200){
-                        alert("removed course Successfully")
+                        
                         this.getcourse()
+                    }else{
+                        alert("removed course unsuccess")
                     }
                 }catch(error){
                     alert(error)
+                }finally{
+                    this.loading=false
                 }
 
                 
             },
             async joincourse(course){
               try{
+                this.loading=true
                 let response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/joincourse',{
                     data:course
                 },{
@@ -607,18 +658,20 @@
                     }
                 })
                 if(response.status===200){
-                    alert(`Joined Course Id ${course.course_id}`)
+                    
                     this.getcourse()
                 }else if(response.status===201){
                     alert(`Already Joined Course ${course.course_title}`)
                 }
               }catch(error){
                 alert(error)
+              }finally{
+                this.loading=false
               }
 
             },
             async editname(){
-               try{
+               try{this.loading=true
                 if(this.editedname!=''&& this.epass!=''){
 
                     let response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/editname',{
@@ -640,11 +693,14 @@
                 }
                }catch(error){
                 alert(error)
+               }finally{
+                this.loading=false
                }
             },
             async changepassword(){
                 
                 try{
+                    this.loading=true
                     if(this.newpass!='' && this.oldpass!=''){
                         let response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/changepassword',{
                             newpassword:this.newpass,
@@ -665,10 +721,13 @@
                     }
                 }catch(error){
                     alert(error)
+                }finally{
+                    this.loading=false
                 }
             }
             ,
             logout(){
+                this.loading=true
                 sessionStorage.removeItem('token');
                 window.location.href = 'login.html';
             },
