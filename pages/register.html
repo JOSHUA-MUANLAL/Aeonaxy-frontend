@@ -168,7 +168,7 @@
                 }
             },async sentotp(){
                 try{
-                    if(this.email!='' && this.newpassword!='' && this.name!='' && this.phone!='' && this.dob!=''){
+                    if(this.email!='' && this.newpassword!='' && this.name!='' && this.phone!='' && this.dob!='' && this.role!='' ){
                         this.loading=true;
                         let response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/generateotpforregister',{
                             email:this.email
