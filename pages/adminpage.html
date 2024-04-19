@@ -309,7 +309,7 @@
 </head>
 
 <body>
-    <div class="dashboard-container" id="dashboard">
+    <div class="dashboard-container" id="dashboard"  >
         <div v-if="loading" class="spinner-overlay">
             <div class="spinner"></div>
             </div>
@@ -354,7 +354,7 @@
 
 
 
-        <div class="overlay" id="overlay" onclick="closepanel()">close the panel</div>
+        <div class="overlay" id="overlay" onclick="closepanel()"  >close the panel</div>
         <div class="menu-bar">
             <div>
                 <h2 class="text-xl font-semibold text-white">User Records</h2>
@@ -368,7 +368,7 @@
        
 
         
-        <div class="card" v-for="user in paginatedData" :key="user.userName">
+        <div class="card" v-for="user in paginatedData" :key="user.userName" >
             <h2><strong>User Name:</strong> {{ user.userName }}</h2>
             <p><strong>User Email:</strong> {{ user.userEmail }}</p>
             <p><strong>User Phone:</strong> {{ user.phone }}</p>
@@ -388,11 +388,12 @@
                 <br><br>
                 <button onclick="togglePopup()">Close</button>
               </div>&nbsp
-            <button class="dropdown-btn" onclick="toggleDropdown(this)">User Courses</button>&nbsp;
 
+
+              
             <button class=" dropdown-btn3 " onclick="togglemessage()">Message User</button>
 
-            <div id="popup2" class="popup2">
+            <div id="popup2" class="popup2" >
                 <h2>Sending Email To  {{user.userName}}</h2>
                 <span class="text-red-600">{{messagef}}</span>
                 <p>Subject: </p>
@@ -404,7 +405,16 @@
                 </form>
                 <br><br>
                 <button onclick="togglemessage()">Close</button>
-              </div>
+              </div>&nbsp
+
+
+
+
+            <button class="dropdown-btn" onclick="toggleDropdown(this)">User Courses</button>&nbsp;
+
+
+
+            
             
 
 
@@ -437,6 +447,8 @@
           popup.style.display = 'block';
         }
       }
+
+     
 
     function togglePopup() {
         var popup = document.getElementById('popup');
@@ -721,6 +733,8 @@
 
                 }catch(error){
                     alert(error)
+                }finally{
+                    this.loading=false
                 }
 
             }
