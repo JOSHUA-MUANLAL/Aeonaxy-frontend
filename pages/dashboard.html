@@ -134,6 +134,7 @@
             background-color: #6c757d;
             color: #fff;
         }
+         
 
         /* Menu styles */
         .menu-bar {
@@ -239,7 +240,7 @@
             <div class="spinner"></div>
             </div>
         <div class="panel" id="myPanel">
-            <h2><p class="text-4xl px-4">{{userdata.userName}} </p></h2>  
+            <h2><p class="text-4xl px-4">{{userdata.userName}} </p></h2>  <button type='button' class='btn btn-danger' onclick='closepanel'>Close</button><br><br>
                 <button type="button" class="btn btn-default btn-sm" @click="vedit=!vedit">
                 <span class="glyphicon glyphicon-pencil"></span> Change Name 
               </button> 
