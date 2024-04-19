@@ -393,7 +393,7 @@
 
     const token = sessionStorage.getItem('token')
     const isRefreshing = performance.navigation.type === 1;
-    if (token ) {
+    if (!token ) {
       window.location.href = 'login.html';
     }
     const app=Vue.createApp({
@@ -523,28 +523,33 @@
 
               },
               async editname(){
-                if(this.editedname!=''&& this.epass!=''){
+                try{
+                    if(this.editedname!=''&& this.epass!=''){
 
-                    let response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/editname',{
-                        newname:this.editedname,
-                        password:this.epass
-                    },{
-                        headers:{
-                            Authorization:token
+                        let response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/editname',{
+                            newname:this.editedname,
+                            password:this.epass
+                        },{
+                            headers:{
+                                Authorization:token
+                            }
+                        })
+    
+                        if(response.status===200){
+                            this.epass=""
+                            alert("Name Succesfully changed")
+                        }else if(response.status===404){
+                            alert("Password Incorrect")
                         }
-                    })
-
-                    if(response.status===200){
-                        this.epass=""
-                        alert("Name Succesfully changed")
-                    }else if(response.status===404){
-                        alert("Password Incorrect")
+    
                     }
-
+                }catch(error){
+                    alert(error)
                 }
             },
             async changepassword(){
                 
+               try{
                 if(this.newpass!='' && this.oldpass!=''){
                     let response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/changepassword',{
                         newpassword:this.newpass,
@@ -563,6 +568,9 @@
                         alert("Old Password Incorrect")
                     }
                 }
+               }catch(error){
+                alert(error)
+               }
             }
             ,
             logout(){

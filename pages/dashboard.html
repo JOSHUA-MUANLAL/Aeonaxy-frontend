@@ -441,23 +441,23 @@
             uniqueSubject(){
                 let uniqueSubjectsSet = new Set();
 
-                // Iterate over the courses array and add each subject to the Set
+               
                 this.courses.forEach(course => {
                     uniqueSubjectsSet.add(course.subject);
                 });
                 
-                // Convert the Set to an array to get unique subjects
+                
                 this.uniqueSubjects =Array.from(uniqueSubjectsSet)
             },
             uniqueLevel(){
                 let uniqueLevelset = new Set();
 
-                // Iterate over the courses array and add each subject to the Set
+                
                 this.courses.forEach(course => {
                     uniqueLevelset.add(course.level);
                 });
                 
-                // Convert the Set to an array to get unique subjects
+               
                 this.uniqueLevels=Array.from(uniqueLevelset)
             },
             async getsubcourse(){
@@ -542,6 +542,7 @@
             }
             ,
             getcoursedata(){
+               try{
                 if(this.selectedSubject!="" && this.selectedLevel!=""){
                     this.getsubcourse()
 
@@ -553,39 +554,51 @@
                 }else{
                     this.getcourse()
                 }
+               }catch(error){
+                alert(error)
+               }
             },
             async getuserdata(){
-                let response=await axios.get('https://aeonaxy-technologies-private-limited.onrender.com/getuserdata',{
-                    headers: {
-                        Authorization: token
-                      }
-                })
-
-                if(response.status===200){
-                    this.dm="recieved"
-                    console.log("Got user data")
-                   
-                    this.userdata=response.data;
-                }else{
-                    
+                try{
+                    let response=await axios.get('https://aeonaxy-technologies-private-limited.onrender.com/getuserdata',{
+                        headers: {
+                            Authorization: token
+                          }
+                    })
+    
+                    if(response.status===200){
+                        this.dm="recieved"
+                        console.log("Got user data")
+                       
+                        this.userdata=response.data;
+                    }else{
+                        alert(response.data.message)
+                    }
+                }catch(error){
+                    alert(error)
                 }
             },
             async removecourse(index){
-                let response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/removecourse',{
-                    index:index
-                },{
-                    headers:{
-                        Authorization:token
+                try{
+                    let response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/removecourse',{
+                        index:index
+                    },{
+                        headers:{
+                            Authorization:token
+                        }
+                    })
+                    if(response.status===200){
+                        alert("removed course Successfully")
+                        this.getcourse()
                     }
-                })
-                if(response.status===200){
-                    alert("removed course Successfully")
-                    this.getcourse()
+                }catch(error){
+                    alert(error)
                 }
 
                 
             },
             async joincourse(course){
+              try{
                 let response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/joincourse',{
                     data:course
                 },{
@@ -599,9 +612,13 @@
                 }else if(response.status===201){
                     alert(`Already Joined Course ${course.course_title}`)
                 }
+              }catch(error){
+                alert(error)
+              }
 
             },
             async editname(){
+               try{
                 if(this.editedname!=''&& this.epass!=''){
 
                     let response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/editname',{
@@ -621,26 +638,33 @@
                     }
 
                 }
+               }catch(error){
+                alert(error)
+               }
             },
             async changepassword(){
                 
-                if(this.newpass!='' && this.oldpass!=''){
-                    let response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/changepassword',{
-                        newpassword:this.newpass,
-                        password:this.oldpass
-                    },{
-                        headers:{
-                            Authorization:token
+                try{
+                    if(this.newpass!='' && this.oldpass!=''){
+                        let response=await axios.post('https://aeonaxy-technologies-private-limited.onrender.com/changepassword',{
+                            newpassword:this.newpass,
+                            password:this.oldpass
+                        },{
+                            headers:{
+                                Authorization:token
+                            }
+                        })
+    
+    
+                        if(response.status===200){
+                            this.epass=''
+                            alert("Password changed success")
+                        }else{
+                            alert("Old Password Incorrect")
                         }
-                    })
-
-
-                    if(response.status===200){
-                        this.epass=''
-                        alert("Password changed success")
-                    }else{
-                        alert("Old Password Incorrect")
                     }
+                }catch(error){
+                    alert(error)
                 }
             }
             ,
