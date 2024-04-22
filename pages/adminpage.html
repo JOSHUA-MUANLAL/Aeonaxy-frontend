@@ -309,7 +309,7 @@
 </head>
 
 <body>
-    <div class="dashboard-container" id="dashboard"  >
+    <div class="dashboard-container" id="dashboard" >
         <div v-if="loading" class="spinner-overlay">
             <div class="spinner"></div>
             </div>
@@ -368,14 +368,14 @@
        
 
         
-        <div class="card" v-for="user in paginatedData" :key="user.userName" >
+        <div class="card" v-for="user in paginatedData" :key="user.userName"  >
             <h2><strong>User Name:</strong> {{ user.userName }}</h2>
             <p><strong>User Email:</strong> {{ user.userEmail }}</p>
             <p><strong>User Phone:</strong> {{ user.phone }}</p>
             <p><strong>User DOB:</strong> {{ user.dob }}</p>
             <button class=" dropdown-btn2 " @click="u=user.userEmail">Remove User</button>
 
-            <div  class="popup" v-show="user.userEmail==u">
+            <div  class="popup" v-show="user.userEmail==u" >
                 <h2>Type Your Password To Confirm </h2>
                 {{removemsg}}
                 <p>Removing User {{user.userName}}</p>
@@ -482,7 +482,7 @@
     const token = sessionStorage.getItem('token')
     const isRefreshing = performance.navigation.type === 1;
     if (!token ) {
-      window.location.href = 'login.html';
+      window.location.href = 'adminlogin.html';
     }
     const app=Vue.createApp({
         data(){
